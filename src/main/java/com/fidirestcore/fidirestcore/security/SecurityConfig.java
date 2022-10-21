@@ -12,7 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.fidirestcore.fidirestcore.controller.AuthController;
 import com.fidirestcore.fidirestcore.request.AuthRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests().anyRequest().authenticated();
-        http.addFilter(new AuthRequest(authenticationManagerBean()));
+        http.addFilter(new AuthController(authenticationManagerBean()));
+        http.addFilterBefore(new AuthRequest(), UsernamePasswordAuthenticationFilter.class);
     }
 
     // Error
