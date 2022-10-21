@@ -1,7 +1,5 @@
 package com.fidirestcore.fidirestcore.security;
 
-import javax.swing.text.html.FormSubmitEvent.MethodType;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // specific public url
+        http.authorizeHttpRequests().antMatchers("/api/refresh-token/**").permitAll();
         http.authorizeHttpRequests().anyRequest().authenticated();
         http.addFilter(new AuthController(authenticationManagerBean()));
         http.addFilterBefore(new AuthRequest(), UsernamePasswordAuthenticationFilter.class);
